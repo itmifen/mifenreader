@@ -1,0 +1,9 @@
+.container{
+  flex:1;
+  flex-direction:column;
+  top:64;
+  background-color: #ffffff;
+}
+.mtbottom{
+  margin-bottom: 64;
+}

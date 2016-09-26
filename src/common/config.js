@@ -1,0 +1,28 @@
+export default {
+      dataapi:[
+        {
+          title:'技术',
+          link:
+            [
+            'http://ifeve.com/feed/',
+            'http://ifeve.com/feed/'
+          ]
+        },
+        {
+          title:'产品',
+          link:
+            [
+              'http://ifeve.com/feed/',
+              'http://ifeve.com/feed/'
+            ]   
+        },
+        {
+          title:'设计',
+          link:
+            [
+              'http://ifeve.com/feed/',
+              'http://ifeve.com/feed/'
+                ]
+        }
+      ]
+}

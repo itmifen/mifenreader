@@ -1,0 +1,30 @@
+
+.indicatorContainer
+{
+  background-color: #673AB7;
+  height: 48;
+  padding-top: 0;
+  padding-bottom: 0;
+  bottom: 64;
+}
+.tabItem{
+  justify-content: center;
+   margin:  0 15 0 15;
+}
+.selectedTabItem
+{
+   justify-content:center;
+   border-bottom-width: 2;
+   border-color: #ffffff;
+   border-style: solid;
+   margin:  0 15 0 15;
+}
+.tabTxt{
+  font-size: 15;
+  color: #ffffff
+}
+.selectedTabTxt{
+  font-size: 15;
+  color: #ffffff;
+  font-weight: bold;
+}
