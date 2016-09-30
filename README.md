@@ -17,3 +17,8 @@ react-native run-ios （或者react-native run-android)
 
 ##### 图示  
 ![image](http://ww1.sinaimg.cn/large/72f96cbagw1f8bzzinkkrj20ks10wtda.jpg)  
+
+
+> 因数据源无法统一，暂时停止更新，基本功能可以运行，有兴趣大家可以沟通交流。   
+后续会有较为完整的React 项目开源。
+IT米粉： http://www.17ij.com
