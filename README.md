@@ -14,3 +14,6 @@ react-native run-ios （或者react-native run-android)
   "react-native-sqlite-storage": "^3.1.2",
   "rn-viewpager": "^1.1.3"
 ```
+
+##### 图示  
+![image](http://ww1.sinaimg.cn/large/72f96cbagw1f8bzzinkkrj20ks10wtda.jpg)  
