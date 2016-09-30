@@ -7,7 +7,7 @@ import {
 	View,
 	Text,
 	Navigator,
-	TouchableOpacity,
+	TouchableHighlight,
 	Image
 } from 'react-native';
 
@@ -21,7 +21,9 @@ class Aritem extends Component {
 
 	render() {
 		return(
-			<TouchableOpacity
+			<TouchableHighlight
+			underlayColor='#FFFAF0'
+			activeOpacity={0.5}   
 				onPress={(e)=>{ this.props.onSelect(this.props.itemdata) }}
 				>
 
@@ -72,7 +74,7 @@ class Aritem extends Component {
 			</View>
 
 
-		</TouchableOpacity>
+		</TouchableHighlight>
 
 		);
 	}

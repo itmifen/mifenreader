@@ -12,7 +12,10 @@ import {
 	StatusBar,
 	ListView,
 	TimerMixin,
-	InteractionManager
+	InteractionManager,
+	BackAndroid,
+	NativeModules,
+	ToastAndroid
 
 } from 'react-native';
 import {
@@ -28,6 +31,7 @@ import Aritem from '../component/aritem';
 import HomeTech from '../component/hometechnology';
 import ArticleDetail from './articledetail';
 import Test from './test';
+import Setting from './setting';
 
 import Config from '../common/config';
 import CommonHelper from '../common/commonhelper';
@@ -40,16 +44,16 @@ import SQLite from '../common/sqlitedal';
 
 var commonHelper = new CommonHelper();
 var sqlLite = new SQLite();
+	var firstClick = 0;
 
 var ds = new ListView.DataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2
 });
-
+var NativeCommonTools = NativeModules.CommonTools;  
 
 class Home extends Component {
 	constructor(props) {
 		super(props);
-
 		this.state = {
 			data: Immutable.Map({
 				dataSource: ds,
@@ -59,6 +63,11 @@ class Home extends Component {
 			})
 		};
 	}
+
+
+
+
+
 
 
 	_onhomepress(rowdata) {
@@ -79,12 +88,9 @@ class Home extends Component {
 
 				}
 
+		
+
 	}
-
-
-
-
-
 
 
 	_renderTabIndicator() {
@@ -114,7 +120,7 @@ class Home extends Component {
 					indicator={this._renderTabIndicator() }
 					>
 					<View style={{ flex: 1 }}>
-						<HomeTech/>
+						<HomeTech onitempress={this._onhomepress.bind(this)}/>
 					</View>
 					<View>
 						<ScrollView

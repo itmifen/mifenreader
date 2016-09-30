@@ -9,7 +9,9 @@ import {
 	Navigator,
 	TouchableOpacity,
 	Image,
-    ListView
+    ListView,
+	RefreshControl,
+	InteractionManager
 } from 'react-native';
 
 
@@ -44,7 +46,8 @@ class HomeTech extends Component {
 				dataSource: ds,
 				listdata: [],
 				pageindex: 1,
-				listLoaded: false
+				listLoaded: false,
+				isRefreshing: false
 			})
 		};
 	}
@@ -52,10 +55,10 @@ class HomeTech extends Component {
     loadmore() {
 		console.log(this.state.data.get('pageindex'));
 		this.setState({
-					data: this.state.data.update('listLoaded', v => v = false)
-				});
+			data: this.state.data.update('listLoaded', v => v = false)
+		});
 
-			if(this.state.data.get('listLoaded') == false) {
+		if (this.state.data.get('listLoaded') == false) {
 			console.log('begin getlist');
 			this._getlist();
 		}
@@ -64,18 +67,16 @@ class HomeTech extends Component {
 	}
 
 
-	_getlist()
-	{
-		sqlLite.GetArticleList(this.state.data.get('pageindex'),(result)=>{
-			if(result.rows.length>0)
-			{
+	_getlist() {
+		sqlLite.GetArticleList(this.state.data.get('pageindex'), (result) => {
+			if (result.rows.length > 0) {
 				this.setState({
-					data: this.state.data.update('pageindex', v => v = v+1)
+					data: this.state.data.update('pageindex', v => v = v + 1)
 				});
 
 				this.setState({
 					data: this.state.data.update('listdata', v => v.concat(result.rows.raw()))
-				
+
 				});
 
 				this.setState({
@@ -88,8 +89,7 @@ class HomeTech extends Component {
 			}
 			else {
 				//无数据时，拉取数据,只有第一页才拉取数据
-				if(this.state.data.get('pageindex')==1)
-				{
+				if (this.state.data.get('pageindex') == 1) {
 					this._fetchdata();
 				}
 
@@ -103,12 +103,13 @@ class HomeTech extends Component {
 
 
 	_renderRow(rowData, rowID) {
-		if(rowData && rowData.title) {
-			return(
+		if (rowData && rowData.title) {
+			return (
 				<Aritem
 					itemdata={rowData}
-					onSelect={(e)=>this._onpress(e)}
+					onSelect={(e) => this._onpress(e) }
 					/>
+
 			)
 		} else {
 			return null
@@ -117,11 +118,11 @@ class HomeTech extends Component {
 	}
 
 	_renderFooterLoading() {
-		if(this.state.data.get('listLoaded')) {
+		if (this.state.data.get('listLoaded')) {
 			return null;
 		} else {
-			return(
-				<View style={{flex:1,justifyContent:'center',height:30,alignItems:'center'}}>
+			return (
+				<View style={{ flex: 1, justifyContent: 'center', height: 30, alignItems: 'center' }}>
 					<Text>加载中...</Text>
 				</View>
 			);
@@ -135,7 +136,7 @@ class HomeTech extends Component {
 
 		let urls = [];
 		let currtab = Config.dataapi[0].link;
-		currtab.forEach(function(value, index, arrary) {
+		currtab.forEach(function (value, index, arrary) {
 			urls.push(value);
 		})
 		return urls;
@@ -145,19 +146,33 @@ class HomeTech extends Component {
 
 	_fetchdata(url) {
 
-        commonHelper.fetchdata('http://blog.jobbole.com/feed/',()=>{
-            commonHelper.fetchdata('http://geek.csdn.net/admin/news_service/rss',()=>{
-            this._getlist();
+        commonHelper.fetchdata('http://blog.jobbole.com/feed/', () => {
+            commonHelper.fetchdata('http://geek.csdn.net/admin/news_service/rss', () => {
+				this._getlist();
             })
         })
 
 	}
 
 
-    	_onpress(rowdata) {
-			this._onhomepress(rowdata);
+	_onpress(rowdata) {
+		InteractionManager.runAfterInteractions(() => {
+		this.props.onitempress(rowdata)
+		});
 	}
 
+	_onRefresh() {
+		this.setState({
+			data: this.state.data.update('isRefreshing', v => v = true)
+		});
+		setTimeout(() => {
+			// prepend 10 items
+			this._fetchdata('aa');
+			this.setState({
+				data: this.state.data.update('isRefreshing', v => v = false)
+			});
+		}, 2000);
+	}
 
 
 
@@ -167,20 +182,28 @@ class HomeTech extends Component {
 	}
 
 	render() {
-		return(
-		
-						<ListView
-							style={{top:0,flex:1,marginBottom:64}}
-							dataSource={this.state.data.get('dataSource')}
-							renderRow={this._renderRow.bind(this)}
-							onEndReached={this.loadmore.bind(this)}
-							renderFooter={this._renderFooterLoading.bind(this)}
-							/>
+		return (
 
-				
-        
+			<ListView
+				style={{ top: 0, flex: 1, marginBottom: 64 }}
+				dataSource={this.state.data.get('dataSource') }
+				renderRow={this._renderRow.bind(this) }
+				onEndReached={this.loadmore.bind(this) }
+				renderFooter={this._renderFooterLoading.bind(this) }
+				refreshControl={
+					<RefreshControl
+						refreshing={this.state.data.get('isRefreshing') }
+						onRefresh={this._onRefresh.bind(this)}
+						title="Loading..."
+						/>
+				}
+				/>
+
+
+
         );
 	}
+
 }
 
 export default HomeTech;
